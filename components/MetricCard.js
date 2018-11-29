@@ -3,6 +3,17 @@ import { View, StyleSheet, Text } from 'react-native'
 import DateHeader from './DateHeader'
 import { getMetricMetaInfo } from '../utils/helpers'
 import { gray } from '../utils/colors'
+
+msToTime = (duration) => {
+  var minutes = parseInt((duration / (1000 * 60)) % 60),
+    hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+
+  return hours + ":" + minutes ;
+}
+
  export default function MetricCard ({ date, metrics }) {
   return (
     <View>
@@ -17,7 +28,7 @@ import { gray } from '../utils/colors'
                 {displayName}
               </Text>
               <Text style={{fontSize: 16, color: gray}}>
-                {metrics[metric]} {unit}
+              {unit} {this.msToTime(metrics[metric])} 
               </Text>
             </View>
           </View>

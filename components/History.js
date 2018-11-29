@@ -30,6 +30,7 @@ class History extends Component {
             .then(() => this.setState(() => ({ ready: true })))
     }
     renderItem = ({ today, ...metrics }, formattedDate, key) => (
+       
         <View style={styles.item}>
             {today
                 ? <View>
@@ -50,7 +51,7 @@ class History extends Component {
             <View style={styles.item}>
                 <DateHeader date={formattedDate} />
                 <Text style={styles.noDataText}>
-                    You didn't log any data on this day.
+                    Não teve nenhum paciente nesse dia!
         </Text>
             </View>
         )

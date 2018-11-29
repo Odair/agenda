@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
 import {
   getMetricMetaInfo,
+  newMetricMetaInfo,
   timeToString,
   getDailyReminderValue
 } from '../utils/helpers'
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
 import DateHeader from './DateHeader'
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, Entypo } from '@expo/vector-icons'
 import TextButton from './TextButton'
 import { submitEntry, removeEntry } from '../utils/api'
 import { connect } from 'react-redux'
@@ -31,32 +32,29 @@ function AdicionarHorario({ onPress }) {
     <TouchableOpacity
       style={Platform.OS === 'ios' ? styles.btnAdicionar : styles.AndroidSubmitBtn}
       onPress={onPress}>
-      <Text style={styles.submitBtnText}>+</Text>
+      <Text style={styles.submitBtnText}><Entypo name='plus' size={30} color={white}/></Text>
     </TouchableOpacity>
   )
 }
 
 class AddEntry extends Component {
   state = {
-    run: 0,
-    bike: 0,
-    swim: 0,
-    sleep: 0,
-    eat: 0,
+    run : 28800000
   }
   increment = (metric) => {
-    const { max, step } = getMetricMetaInfo(metric)
     this.setState((state) => {
-      const count = state[metric] + step
+      const count = state[metric] + 900000
       return {
         ...state,
-        [metric]: count > max ? max : count,
+        [metric]: count,
       }
     })
   }
   decrement = (metric) => {
+    
     this.setState((state) => {
-      const count = state[metric] - getMetricMetaInfo(metric).step
+      console.log(state[metric])
+      const count = state[metric] - 900000
       return {
         ...state,
         [metric]: count < 0 ? 0 : count,
@@ -75,24 +73,27 @@ class AddEntry extends Component {
     this.props.dispatch(addEntry({
       [key]: entry
     }))
-    this.setState(() => ({ run: 0, bike: 0, swim: 0, sleep: 0, eat: 0 }))
+    this.setState(() => ({ run: 0 }))
     // Navigate to home
     submitEntry({ key, entry })
     // Clear local notification
 
-    reset = () => {
-      const key = timeToString()
-      this.props.dispatch(addEntry({
-        [key]: getDailyReminderValue()
-      }))
-      // Route to Home
-      submitEntry({ key, entry })
-    }
+    
   }
 
-  adicionaHorario = () =>{
-
+  reset = () => {
+    const key = timeToString()
+    this.props.dispatch(addEntry({
+      [key]: getDailyReminderValue()
+    }))
+    // Route to Home
+    submitEntry({ key, entry })
   }
+
+  adicionaHorario = (metaInfo) =>{ 
+  }
+
+   
 
   render() {
 
@@ -122,13 +123,7 @@ class AddEntry extends Component {
           return (
             <View key={key} style={styles.row}>
               {getIcon()}
-              {type === 'slider'
-                ? <UdaciSlider
-                  value={value}
-                  onChange={(value) => this.slide(key, value)}
-                  {...rest}
-                />
-                : <UdaciSteppers
+              { <UdaciSteppers
                   value={value}
                   onIncrement={() => this.increment(key)}
                   onDecrement={() => this.decrement(key)}
@@ -138,8 +133,8 @@ class AddEntry extends Component {
             </View>
           )
         })}
-        <AdicionarHorario onPress={this.adicionaHorario} />
-        <SubmitBtn onPress={this.submit} />
+        <AdicionarHorario onPress={this.adicionaHorario(metaInfo)} />
+       
       </View>
     )
   }
@@ -183,8 +178,10 @@ const styles = StyleSheet.create({
   btnAdicionar: {
     width: 60,
     height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 30,
-    backgroundColor: '#ee6e73',
+    backgroundColor: purple,
     position: 'absolute',
     bottom: 10,
     right: 10,

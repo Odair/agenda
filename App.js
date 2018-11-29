@@ -11,8 +11,8 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 
 const Tabs = createBottomTabNavigator(
   {
-    History: History,
-    AddEntry: AddEntry,
+    Pacientes: History,
+    Adicionar: AddEntry,
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -20,7 +20,7 @@ const Tabs = createBottomTabNavigator(
         const { routeName } = navigation.state;
         // You can return any component that you like here! We usually use an
         // icon component from react-native-vector-icons
-        return routeName === 'History' ? (
+        return routeName === 'Pacientes' ? (
           <Ionicons name="ios-bookmarks" size={30} color={tintColor} />
         ) : (
             <FontAwesome name="plus-square" size={30} color={tintColor} />

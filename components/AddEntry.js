@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, Platform, FlatList } from 'react-native'
 import {
   getMetricMetaInfo,
   newMetricMetaInfo,
@@ -117,6 +117,7 @@ class AddEntry extends Component {
     return (
       <View style={styles.container}>
         <DateHeader date={(new Date()).toLocaleDateString()} />
+         
         {Object.keys(metaInfo).map((key) => {
           const { getIcon, type, ...rest } = metaInfo[key]
           const value = this.state[key]

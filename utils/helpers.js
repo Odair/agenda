@@ -22,8 +22,10 @@ const styles = StyleSheet.create({
 })
 
 export function getMetricMetaInfo(metric) {
-  const info = {
-    run: {
+  const info = [
+    {
+      _id: 1,
+      horario: 28000,
       displayName: 'Maria Jose',
       max: 100000000,
       unit: 'Horário',
@@ -41,10 +43,8 @@ export function getMetricMetaInfo(metric) {
         )
       }
     }
-  }
-  return typeof metric === 'undefined'
-    ? info
-    : info[metric]
+  ]
+  return info
 }
 
 export function newMetricMetaInfo() {

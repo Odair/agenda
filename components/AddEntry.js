@@ -39,25 +39,49 @@ function AdicionarHorario({ onPress }) {
 
 class AddEntry extends Component {
   state = {
-    run : 28800000
+    pacientes: []
   }
-  increment = (metric) => {
+
+  componentDidMount(){
+
+    const pacientes  = getMetricMetaInfo(); 
+    
+    this.setState({ pacientes });
+
+  }
+
+  increment = (paciente) => {
+    let pacientes = this.state.pacientes;
+    
+    pacientes.forEach((item) =>{
+      if(item._id == paciente._id){
+        item.horario = item.horario + 900000
+      }
+
+    })
+
     this.setState((state) => {
-      const count = state[metric] + 900000
       return {
         ...state,
-        [metric]: count,
+        pacientes
       }
     })
   }
-  decrement = (metric) => {
+  decrement = (paciente) => {
     
     this.setState((state) => {
-      console.log(state[metric])
-      const count = state[metric] - 900000
+
+    let pacientes = this.state.pacientes;
+
+    pacientes.forEach((item) =>{
+      if(item._id == paciente._id){
+        item.horario = item.horario - 900000
+      }
+
+    })
       return {
         ...state,
-        [metric]: count < 0 ? 0 : count,
+        pacientes,
       }
     })
   }
@@ -90,14 +114,16 @@ class AddEntry extends Component {
     submitEntry({ key, entry })
   }
 
-  adicionaHorario = (metaInfo) =>{ 
+  adicionaHorario = () => { 
+    const novoPaciente = newMetricMetaInfo();
+
+    console.log("teste");
   }
 
    
 
   render() {
 
-    const metaInfo = getMetricMetaInfo()
 
     if (this.props.alreadyLogged) {
       return (
@@ -118,23 +144,23 @@ class AddEntry extends Component {
       <View style={styles.container}>
         <DateHeader date={(new Date()).toLocaleDateString()} />
          
-        {Object.keys(metaInfo).map((key) => {
-          const { getIcon, type, ...rest } = metaInfo[key]
-          const value = this.state[key]
+        {this.state.pacientes.map(paciente => {
+          const { getIcon, ...rest } = paciente
+          const value = paciente.horario
           return (
-            <View key={key} style={styles.row}>
+            <View key={paciente._id} style={styles.row}>
               {getIcon()}
               { <UdaciSteppers
                   value={value}
-                  onIncrement={() => this.increment(key)}
-                  onDecrement={() => this.decrement(key)}
+                  onIncrement={() => this.increment(paciente)}
+                  onDecrement={() => this.decrement(paciente)}
                   {...rest}
                 />}
 
             </View>
           )
         })}
-        <AdicionarHorario onPress={this.adicionaHorario(metaInfo)} />
+        <AdicionarHorario onPress={this.adicionaHorario()} />
        
       </View>
     )
